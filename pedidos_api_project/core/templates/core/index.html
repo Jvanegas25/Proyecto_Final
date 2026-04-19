@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>API Gestión de Pedidos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    h1 {
+      color: #2c3e50;
+      border-bottom: 3px solid #2c3e50;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: #2c3e50;
+      margin-top: 40px;
+    }
+
+    h3 {
+      color: #555;
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .info-box {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .info-box p {
+      margin: 6px 0;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+
+    .method {
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: inline-block;
+    }
+
+    .GET    { background-color: #d4edda; color: #155724; }
+    .POST   { background-color: #cce5ff; color: #004085; }
+    .PUT    { background-color: #fff3cd; color: #856404; }
+    .DELETE { background-color: #f8d7da; color: #721c24; }
+
+    pre {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 14px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    .endpoint-block {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+
+    code {
+      font-family: monospace;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      border-top: 1px solid #ddd;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>API Gestión de Pedidos</h1>
+
+  <div class="info-box">
+    <p><strong>Descripción:</strong> API REST para gestionar clientes y pedidos.</p>
+    <p><strong>Base URL:</strong> <code>http://127.0.0.1:8000/api/</code></p>
+    <p><strong>Formato de respuesta:</strong> JSON</p>
+    <p><strong>Framework:</strong> Django REST Framework</p>
+    <p><strong>Base de datos:</strong> PostgreSQL</p>
+  </div>
+
+  <h2>Lista de Endpoints</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Método</th>
+        <th>URL</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="method GET">GET</span></td>
+        <td><code>/api/clientes/</code></td>
+        <td>Listar todos los clientes</td>
+      </tr>
+      <tr>
+        <td><span class="method POST">POST</span></td>
+        <td><code>/api/clientes/</code></td>
+        <td>Crear un nuevo cliente</td>
+      </tr>
+      <tr>
+        <td><span class="method GET">GET</span></td>
+        <td><code>/api/clientes/{id}/</code></td>
+        <td>Obtener un cliente por ID</td>
+      </tr>
+      <tr>
+        <td><span class="method PUT">PUT</span></td>
+        <td><code>/api/clientes/{id}/</code></td>
+        <td>Actualizar un cliente</td>
+      </tr>
+      <tr>
+        <td><span class="method DELETE">DELETE</span></td>
+        <td><code>/api/clientes/{id}/</code></td>
+        <td>Eliminar un cliente</td>
+      </tr>
+      <tr>
+        <td><span class="method GET">GET</span></td>
+        <td><code>/api/pedidos/</code></td>
+        <td>Listar todos los pedidos</td>
+      </tr>
+      <tr>
+        <td><span class="method POST">POST</span></td>
+        <td><code>/api/pedidos/</code></td>
+        <td>Crear un nuevo pedido</td>
+      </tr>
+      <tr>
+        <td><span class="method GET">GET</span></td>
+        <td><code>/api/pedidos/{id}/</code></td>
+        <td>Obtener un pedido por ID</td>
+      </tr>
+      <tr>
+        <td><span class="method PUT">PUT</span></td>
+        <td><code>/api/pedidos/{id}/</code></td>
+        <td>Actualizar un pedido</td>
+      </tr>
+      <tr>
+        <td><span class="method DELETE">DELETE</span></td>
+        <td><code>/api/pedidos/{id}/</code></td>
+        <td>Eliminar un pedido</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Detalle Clientes -->
+  <h2>Clientes</h2>
+
+  <div class="endpoint-block">
+    <h3><span class="method GET">GET</span> /api/clientes/</h3>
+    <p>Devuelve la lista de todos los clientes registrados.</p>
+    <p><strong>Ejemplo de respuesta:</strong></p>
+    <pre>[
+  {
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "email": "juan@email.com",
+    "telefono": "8888-1234"
+  },
+  {
+    "id": 2,
+    "nombre": "María López",
+    "email": "maria@email.com",
+    "telefono": "7777-5678"
+  }
+]</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method POST">POST</span> /api/clientes/</h3>
+    <p>Crea un nuevo cliente. Se deben enviar los datos en el cuerpo de la solicitud.</p>
+    <p><strong>Ejemplo de request:</strong></p>
+    <pre>{
+  "nombre": "Carlos Jiménez",
+  "email": "carlos@email.com",
+  "telefono": "6666-4321"
+}</pre>
+    <p><strong>Ejemplo de respuesta (201 Created):</strong></p>
+    <pre>{
+  "id": 3,
+  "nombre": "Carlos Jiménez",
+  "email": "carlos@email.com",
+  "telefono": "6666-4321"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method GET">GET</span> /api/clientes/{id}/</h3>
+    <p>Devuelve los datos de un cliente específico según su ID.</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del cliente (número entero)</p>
+    <p><strong>Ejemplo de respuesta:</strong></p>
+    <pre>{
+  "id": 1,
+  "nombre": "Juan Pérez",
+  "email": "juan@email.com",
+  "telefono": "8888-1234"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method PUT">PUT</span> /api/clientes/{id}/</h3>
+    <p>Actualiza los datos de un cliente existente.</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del cliente a actualizar</p>
+    <p><strong>Ejemplo de request:</strong></p>
+    <pre>{
+  "nombre": "Juan Pérez Actualizado",
+  "email": "juan_nuevo@email.com",
+  "telefono": "5555-0000"
+}</pre>
+    <p><strong>Ejemplo de respuesta (200 OK):</strong></p>
+    <pre>{
+  "id": 1,
+  "nombre": "Juan Pérez Actualizado",
+  "email": "juan_nuevo@email.com",
+  "telefono": "5555-0000"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method DELETE">DELETE</span> /api/clientes/{id}/</h3>
+    <p>Elimina un cliente según su ID.</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del cliente a eliminar</p>
+    <p><strong>Respuesta:</strong> 204 No Content (sin cuerpo de respuesta)</p>
+  </div>
+
+  <!-- Detalle Pedidos -->
+  <h2>Pedidos</h2>
+
+  <div class="endpoint-block">
+    <h3><span class="method GET">GET</span> /api/pedidos/</h3>
+    <p>Devuelve la lista de todos los pedidos registrados.</p>
+    <p><strong>Ejemplo de respuesta:</strong></p>
+    <pre>[
+  {
+    "id": 1,
+    "cliente": 1,
+    "producto": "Laptop Dell",
+    "cantidad": 2,
+    "estado": "pendiente",
+    "fecha": "2026-04-19T10:00:00Z"
+  }
+]</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method POST">POST</span> /api/pedidos/</h3>
+    <p>Crea un nuevo pedido asociado a un cliente existente.</p>
+    <p><strong>Ejemplo de request:</strong></p>
+    <pre>{
+  "cliente": 1,
+  "producto": "Monitor LG 27",
+  "cantidad": 1,
+  "estado": "pendiente"
+}</pre>
+    <p><strong>Ejemplo de respuesta (201 Created):</strong></p>
+    <pre>{
+  "id": 2,
+  "cliente": 1,
+  "producto": "Monitor LG 27",
+  "cantidad": 1,
+  "estado": "pendiente",
+  "fecha": "2026-04-19T10:05:00Z"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method GET">GET</span> /api/pedidos/{id}/</h3>
+    <p>Devuelve los datos de un pedido específico según su ID.</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del pedido</p>
+    <p><strong>Ejemplo de respuesta:</strong></p>
+    <pre>{
+  "id": 1,
+  "cliente": 1,
+  "producto": "Laptop Dell",
+  "cantidad": 2,
+  "estado": "pendiente",
+  "fecha": "2026-04-19T10:00:00Z"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method PUT">PUT</span> /api/pedidos/{id}/</h3>
+    <p>Actualiza los datos de un pedido, por ejemplo cambiar el estado a "entregado".</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del pedido a actualizar</p>
+    <p><strong>Ejemplo de request:</strong></p>
+    <pre>{
+  "cliente": 1,
+  "producto": "Laptop Dell",
+  "cantidad": 2,
+  "estado": "entregado"
+}</pre>
+    <p><strong>Ejemplo de respuesta (200 OK):</strong></p>
+    <pre>{
+  "id": 1,
+  "cliente": 1,
+  "producto": "Laptop Dell",
+  "cantidad": 2,
+  "estado": "entregado",
+  "fecha": "2026-04-19T10:00:00Z"
+}</pre>
+  </div>
+
+  <div class="endpoint-block">
+    <h3><span class="method DELETE">DELETE</span> /api/pedidos/{id}/</h3>
+    <p>Elimina un pedido según su ID.</p>
+    <p><strong>Parámetro:</strong> <code>id</code> — ID del pedido a eliminar</p>
+    <p><strong>Respuesta:</strong> 204 No Content (sin cuerpo de respuesta)</p>
+  </div>
+
+  <footer>
+    API Gestión de Pedidos &nbsp;·&nbsp; Programación de Computadoras &nbsp;·&nbsp; 2026
+  </footer>
+
+</body>
+</html>
